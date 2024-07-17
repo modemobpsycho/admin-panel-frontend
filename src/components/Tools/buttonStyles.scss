@@ -1,0 +1,33 @@
+.accessButton {
+	background-color: #4caf50;
+	color: #ffffff;
+	border: none;
+	padding: 8px 16px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 14px;
+	cursor: pointer;
+	border-radius: 4px;
+}
+
+.accessButton:hover {
+	background-color: #45a049;
+}
+
+.deleteButton {
+	background-color: #f44336;
+	color: #ffffff;
+	border: none;
+	padding: 8px 16px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 15px;
+	cursor: pointer;
+	border-radius: 4px;
+}
+
+.deleteButton:hover {
+	background-color: #d32f2f;
+}

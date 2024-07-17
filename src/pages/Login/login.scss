@@ -1,0 +1,96 @@
+.login-container {
+	max-width: 400px;
+	margin: 0 auto;
+}
+
+.login-form {
+	background-color: #f5f5f5;
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+	display: flex;
+	flex-direction: column;
+    box-align: center !important;
+}
+
+.login-logo {
+	text-align: center;
+	font-size: 24px;
+	font-weight: bold;
+	margin-bottom: 20px;
+}
+
+.form-group {
+	margin-bottom: 20px;
+}
+
+.form-label {
+	display: block;
+	font-weight: bold;
+	margin-bottom: 5px;
+}
+
+.form-control {
+	width: 100%;
+	padding: 10px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	font-size: 16px;
+}
+
+.form-control:focus {
+	outline: none;
+	border-color: #6c63ff;
+	box-shadow: 0 0 5px rgba(108, 99, 255, 0.5);
+}
+
+.form-text {
+	font-size: 14px;
+	color: #777;
+}
+
+.checkbox-label {
+	display: flex;
+	align-items: center;
+	font-size: 14px;
+	color: #555;
+	margin-bottom: 10px;
+}
+
+.checkbox-input {
+	margin-right: 10px;
+}
+
+.submit-button {
+	display: block;
+	width: 100%;
+	padding: 10px;
+	background-color: #6c63ff;
+	border: none;
+	border-radius: 5px;
+	color: #fff;
+	font-size: 16px;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+}
+
+.submit-button:hover {
+	background-color: #564dff;
+}
+
+.submit-button:focus {
+	outline: none;
+}
+
+.register-link {
+	display: block;
+	text-align: center;
+	color: #6c63ff;
+	font-size: 14px;
+	margin-top: 10px;
+	transition: color 0.3s ease;
+}
+
+.register-link:hover {
+	color: #564dff;
+}
