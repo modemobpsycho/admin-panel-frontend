@@ -1,5 +1,5 @@
 .accessButton {
-	background-color: #4caf50;
+	background-color: #9f15ae;
 	color: #ffffff;
 	border: none;
 	padding: 8px 16px;
@@ -12,7 +12,24 @@
 }
 
 .accessButton:hover {
-	background-color: #45a049;
+	background-color: #80118c;
+}
+
+.unblockButton {
+	background-color: #0bd834;
+	color: #ffffff;
+	border: none;
+	padding: 8px 16px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 14px;
+	cursor: pointer;
+	border-radius: 4px;
+}
+
+.unblockButton:hover {
+	background-color: #0d9114;
 }
 
 .deleteButton {
@@ -23,7 +40,7 @@
 	text-align: center;
 	text-decoration: none;
 	display: inline-block;
-	font-size: 15px;
+	font-size: 14px;
 	cursor: pointer;
 	border-radius: 4px;
 }

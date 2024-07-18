@@ -4,25 +4,13 @@ nav {
 
 	.nav-link {
 		text-decoration: none;
-		color: rgb(255, 255, 255);
+		color: rgb(255, 255, 255) !important;
 		font-weight: 100;
 		font-size: 1.1rem;
 		margin: 0 0.2rem;
 
 		&:hover {
-			color: rgb(255, 255, 255);
-			transform: scale(0.9);
-			transition: 0.3s;
-		}
-	}
-
-	.navbar-brand {
-		font-weight: bold;
-		color: white;
-		margin-left: 0.5rem;
-
-		&:hover {
-			color: rgb(255, 255, 255);
+			color: rgb(239, 239, 239);
 			transform: scale(0.9);
 			transition: 0.3s;
 		}

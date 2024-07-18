@@ -20,7 +20,7 @@ export const AccessButton: React.FC<AccessButtonProps> = props => {
 			className={access ? 'accessButton' : 'unblockButton'}
 			onClick={handleClick}
 		>
-			{access ? 'Access' : 'Unblock'}
+			{access ? 'Block' : 'Unblock'}
 		</button>
 	)
 }
