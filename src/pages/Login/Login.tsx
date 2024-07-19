@@ -1,12 +1,12 @@
 import { useState, ChangeEvent, FormEvent } from 'react'
 import { Navigate } from 'react-router-dom'
 import './login.scss'
-import Navbar from '../../components/Navbar/Navbar'
 import useUserStore from '../../stores/userStore'
+import { API_URL } from '../../helpers/constants'
 
 async function loginUser(email: string, password: string) {
 	try {
-		const response = await fetch('http://localhost:5000/api/login', {
+		const response = await fetch(API_URL + '/login', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -16,9 +16,10 @@ async function loginUser(email: string, password: string) {
 
 		if (response.ok) {
 			const data = await response.json()
-			return data.token
+			return { token: data.accessToken, username: data.username }
 		} else {
-			console.log('Login failed')
+			const errorData = await response.json()
+			console.log('Login failed:', errorData.message)
 			return null
 		}
 	} catch (error) {
@@ -27,7 +28,7 @@ async function loginUser(email: string, password: string) {
 	}
 }
 
-export default function Login(): JSX.Element {
+export default function Login() {
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 	const login = useUserStore(state => state.login)
@@ -43,24 +44,21 @@ export default function Login(): JSX.Element {
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault()
 
-		const token = await loginUser(email, password)
-		if (token) {
-			document.cookie = `token=${token}; path=/;`
-			console.log('Token:', token)
-			login(token) // Вызываем метод `login` из `userStore`
+		const userInfo = await loginUser(email, password)
+		if (userInfo && userInfo.token) {
+			login(userInfo.token, email, userInfo.username)
 		}
 	}
 
-	const isLoggedIn = useUserStore(state => state.isLoggedIn)
+	const token = useUserStore(state => state.token)
 
-	if (isLoggedIn) {
+	if (token) {
 		return <Navigate to='/' replace />
 	}
 
 	return (
 		<>
-			<Navbar />
-			<div className='login-container mt-3'>
+			<div className='login-container'>
 				<form className='login-form' onSubmit={handleSubmit}>
 					<h3 className='login-logo'>Log In</h3>
 					<div className='form-group'>

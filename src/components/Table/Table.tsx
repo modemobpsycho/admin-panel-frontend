@@ -6,6 +6,7 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import BlockIcon from '@mui/icons-material/Block'
 import useUserStore from '../../stores/userStore'
 import { User } from '../../types/user.interface'
+import { API_URL } from '../../helpers/constants'
 
 export default function Table() {
 	const [data, setData] = useState<User[]>([])
@@ -19,7 +20,7 @@ export default function Table() {
 	useEffect(() => {
 		setIsUsersLoaded(false)
 		axios
-			.get<User[]>('http://localhost:5000/api/users')
+			.get<User[]>(API_URL + '/users')
 			.then(response => {
 				setData(response.data)
 			})
@@ -55,7 +56,7 @@ export default function Table() {
 
 	const handleUpdateAccess = (access: boolean) => {
 		axios
-			.put(`http://localhost:5000/api/users`, { access, userIds: selectedRows })
+			.put(API_URL + '/users', { access, userIds: selectedRows })
 			.then(response => {
 				setData(response.data)
 			})
@@ -66,7 +67,7 @@ export default function Table() {
 
 	const handleDeleteUsers = () => {
 		axios
-			.delete(`http://localhost:5000/api/users`, {
+			.delete(API_URL + '/users', {
 				data: { userIds: selectedRows },
 			})
 			.then(response => {
@@ -119,7 +120,6 @@ export default function Table() {
 	return (
 		<div>
 			<div className='button-container'>
-				<span>{process.env.REACT_APP_API_URL}</span>
 				<Button
 					className='m-2'
 					variant='contained'
@@ -148,49 +148,56 @@ export default function Table() {
 					Unblock
 				</Button>
 			</div>
-			<table className='table'>
-				<thead>
-					<tr>
-						<th>
-							<input
-								type='checkbox'
-								checked={selectAllRows}
-								onChange={handleSelectAllRows}
-								ref={mainCheckbox}
-							/>
-						</th>
-						<th>ID</th>
-						<th>Username</th>
-						<th>Email</th>
-						<th>Position</th>
-						<th>Last login</th>
-						<th>Status</th>
-					</tr>
-				</thead>
-				<tbody>
-					{data.map(item => (
-						<tr key={item.id}>
-							<td>
+			<div className='table-container'>
+				<table className='table'>
+					<thead>
+						<tr>
+							<th className='header-cell checkbox-cell'>
 								<input
 									type='checkbox'
-									checked={selectedRows.includes(item.id)}
-									onChange={event => handleCheckboxChange(event, item.id)}
+									checked={selectAllRows}
+									onChange={handleSelectAllRows}
+									ref={mainCheckbox}
 								/>
-							</td>
-							<td>{item.id}</td>
-							<td>{item.username}</td>
-							<td>{item.email}</td>
-							<td>{item.position}</td>
-							<td>
-								{new Date(item.lastLogin).toLocaleTimeString() +
-									' ' +
-									new Date(item.lastLogin).toLocaleDateString()}
-							</td>
-							<td>{getStatusLabel(item.access)}</td>
+							</th>
+							<th>
+								Username
+								<br />
+								<span style={{ fontSize: 'small' }}>Position</span>
+							</th>
+							<th className='header-cell'>Email</th>
+							<th className='header-cell'>Last login</th>
+							<th className='header-cell'>Status</th>
 						</tr>
-					))}
-				</tbody>
-			</table>
+					</thead>
+					<tbody>
+						{data.map(item => (
+							<tr key={item.id}>
+								<td className='checkbox-cell'>
+									<input
+										type='checkbox'
+										checked={selectedRows.includes(item.id)}
+										onChange={event => handleCheckboxChange(event, item.id)}
+									/>
+								</td>
+								<td>
+									{item.username}
+									<br />
+									<span style={{ fontSize: 'small' }}>
+										{item.position ?? '-'}
+									</span>
+								</td>
+								<td>{item.email}</td>
+								<td>
+									{new Date(item.lastLogin).toLocaleTimeString()}{' '}
+									{new Date(item.lastLogin).toLocaleDateString()}
+								</td>
+								<td>{getStatusLabel(item.access)}</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
 		</div>
 	)
 }
