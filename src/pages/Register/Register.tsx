@@ -11,7 +11,7 @@ export default function Register() {
 		password: '',
 		access: true,
 	})
-	const [response, setResponse] = useState('')
+	const [, setResponse] = useState('')
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
 		setFormData({ ...formData, [e.target.name]: e.target.value })
