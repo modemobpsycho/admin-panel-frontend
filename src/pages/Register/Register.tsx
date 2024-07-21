@@ -2,8 +2,11 @@ import axios from 'axios'
 import { useState, ChangeEvent, FormEvent } from 'react'
 import './register.scss'
 import { API_URL } from '../../helpers/constants'
+import { errorHandler } from '../../helpers/errorHandler'
+import useModalStore from '../../stores/modalStore'
 
 export default function Register() {
+	const { showMessage } = useModalStore(state => state)
 	const [formData, setFormData] = useState({
 		username: '',
 		email: '',
@@ -19,19 +22,17 @@ export default function Register() {
 
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault()
-		axios
-			.post(API_URL + '/user', {
+		try {
+			const { data } = await axios.post(API_URL + '/user', {
 				...formData,
 				position:
 					formData.position.length === 0 ? undefined : formData.position,
 			})
-			.then(response => {
-				setResponse(response.data)
-			})
-			.catch(error => {
-				console.log(error)
-			})
-
+			setResponse(data)
+			showMessage('Registration successful!')
+		} catch (error) {
+			errorHandler(error, showMessage)
+		}
 		setFormData({
 			username: '',
 			email: '',

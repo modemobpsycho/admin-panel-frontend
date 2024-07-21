@@ -3,35 +3,34 @@ import { Navigate } from 'react-router-dom'
 import './login.scss'
 import useUserStore from '../../stores/userStore'
 import { API_URL } from '../../helpers/constants'
-
-async function loginUser(email: string, password: string) {
-	try {
-		const response = await fetch(API_URL + '/login', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({ email, password }),
-		})
-
-		if (response.ok) {
-			const data = await response.json()
-			return { token: data.accessToken, username: data.username }
-		} else {
-			const errorData = await response.json()
-			console.log('Login failed:', errorData.message)
-			return null
-		}
-	} catch (error) {
-		console.error('Error during login:', error)
-		return null
-	}
-}
+import useModalStore from '../../stores/modalStore'
+import axios from 'axios'
+import { errorHandler } from '../../helpers/errorHandler'
 
 export default function Login() {
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 	const login = useUserStore(state => state.login)
+	const { showMessage } = useModalStore(state => state)
+
+	const token = useUserStore(state => state.token)
+
+	if (token) {
+		return <Navigate to='/' replace />
+	}
+
+	async function loginUser() {
+		try {
+			const { data } = await axios.post(API_URL + '/login', {
+				email,
+				password,
+			})
+			showMessage('Login successful!')
+			return { token: data.accessToken, username: data.username }
+		} catch (error) {
+			errorHandler(error, showMessage)
+		}
+	}
 
 	const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
 		setEmail(e.target.value)
@@ -44,16 +43,10 @@ export default function Login() {
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault()
 
-		const userInfo = await loginUser(email, password)
+		const userInfo = await loginUser()
 		if (userInfo && userInfo.token) {
 			login(userInfo.token, email, userInfo.username)
 		}
-	}
-
-	const token = useUserStore(state => state.token)
-
-	if (token) {
-		return <Navigate to='/' replace />
 	}
 
 	return (

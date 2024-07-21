@@ -7,6 +7,8 @@ import BlockIcon from '@mui/icons-material/Block'
 import useUserStore from '../../stores/userStore'
 import { User } from '../../types/user.interface'
 import { API_URL } from '../../helpers/constants'
+import { errorHandler } from '../../helpers/errorHandler'
+import useModalStore from '../../stores/modalStore'
 
 export default function Table() {
 	const [data, setData] = useState<User[]>([])
@@ -16,6 +18,7 @@ export default function Table() {
 	const mainCheckbox = useRef<HTMLInputElement>(null)
 	const email = useUserStore(state => state.email)
 	const { logout } = useUserStore(state => state)
+	const { showMessage } = useModalStore(state => state)
 
 	useEffect(() => {
 		setIsUsersLoaded(false)
@@ -55,34 +58,32 @@ export default function Table() {
 	}, [selectedRows.length, data.length])
 
 	const handleUpdateAccess = (access: boolean) => {
-		axios
-			.put(API_URL + '/users', { access, userIds: selectedRows })
-			.then(response => {
-				setData(response.data)
-			})
-			.catch(error => {
-				console.log(error)
-			})
+		try {
+			axios
+				.put(API_URL + '/users', { access, userIds: selectedRows })
+				.then(response => {
+					setData(response.data)
+				})
+			showMessage('Users access successfully updated!')
+		} catch (error) {
+			errorHandler(error, showMessage)
+		}
 	}
 
 	const handleDeleteUsers = () => {
-		axios
-			.delete(API_URL + '/users', {
+		try {
+			axios.delete(API_URL + '/users', {
 				data: { userIds: selectedRows },
 			})
-			.then(response => {
-				if (response.status === 204) {
-					setData(prevData =>
-						prevData.filter(
-							item => item.id !== selectedRows.find(rowId => rowId === item.id)
-						)
-					)
-				}
-			})
-			.catch(error => {
-				console.log(error)
-			})
-
+			setData(prevData =>
+				prevData.filter(
+					item => item.id !== selectedRows.find(rowId => rowId === item.id)
+				)
+			)
+			showMessage('Users deleted successfully!')
+		} catch (error) {
+			errorHandler(error, showMessage)
+		}
 		setSelectedRows([])
 		setSelectAllRows(false)
 	}
